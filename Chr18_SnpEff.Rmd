@@ -1,0 +1,25 @@
+---
+title: "Chr18_SnpEff"
+author: "Dave Speca"
+date: "7/22/2017"
+output: html_document
+---
+
+####Preliminaries
+
+Exploratory analysis of SnpEff output indicated that SnpEff ANN= data is appended to the INFO column of the .vcf file (column #8), making it quite unwieldy. But I should be able to use dplyr to search for specific strings (variant calls) that have been added by SnpEff.
+
+####SnpEff analysis
+
+N.B. I downloaded the latest version of SnpEff into my home directory. Then within the snpEff home directory I ran this command from the Terminal:
+
+`java -Xmx4g -jar snpEff.jar mm10 Chr18/Chr18.all.vcf  > Chr18.all.ann.vcf`
+
+This (quite rapidly) generated the Chr18.all.ann.vcf file.
+N.B. Chr2.all.vcf was 18.9Mb, Chr2.all.ann.vcf is 71Mb, so this just adds additional columns of information. Then I started this new R_project (Chr18) after creating a git repository, and I moved the Chr18.all.ann.vcf file to the project's directory.
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
