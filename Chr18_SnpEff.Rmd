@@ -109,7 +109,27 @@ plot.snps
 Chr18.Q40.congenic.tidy.data <- filter(Chr18.Q40.tidy.data, POS > 12000000 & POS < 75000000)
 ```
 
+###Let's make a table!
 
+```{r}
+# count the numbers common and unique to each genotype
+ftable(Chr18.Q40.congenic.tidy.data[,c("DBA_gt","Chr18_gt")])
+```
+
+```{r}
+# eliminate SNPs that are shared between DBA & Chr18
+Chr18.FNL.data <- subset(Chr18.Q40.congenic.tidy.data,!(DBA_gt=="1/1" & Chr18_gt == "1/1"))
+Chr18.FNL.data <- subset(Chr18.FNL.data, !(DBA_gt=="0/1" & Chr18_gt=="0/1"))
+Chr18.FNL.data <- subset(Chr18.FNL.data, !(DBA_gt=="1/2" & Chr18_gt=="1/2"))
+
+```
+
+### Let's start looking for meaningful variants!
+
+```{r}
+# get rid of intergenic_region & intron_variant
+Chr18.InGene <- filter(Chr18.FNL.data, !grepl("intergenic_region|intron_variant", INFO))
+```
 
 
 
