@@ -16,10 +16,81 @@ N.B. I downloaded the latest version of SnpEff into my home directory. Then with
 `java -Xmx4g -jar snpEff.jar mm10 Chr18/Chr18.all.vcf  > Chr18.all.ann.vcf`
 
 This (quite rapidly) generated the Chr18.all.ann.vcf file.
-N.B. Chr2.all.vcf was 18.9Mb, Chr2.all.ann.vcf is 71Mb, so this just adds additional columns of information. Then I started this new R_project (Chr18) after creating a git repository, and I moved the Chr18.all.ann.vcf file to the project's directory.
+N.B. Chr2.all.vcf was 18.9 Mb, Chr2.all.ann.vcf is 27.5 Mb, so this just adds additional columns of information. Then I started this new R_project (Chr18) after creating a git repository, and I moved the Chr18.all.ann.vcf file to the project's directory.
 
+The SnpEff annotations are contained within the "INFO" variable. I will need to extract them.
 
 ```{r}
 library(ggplot2)
 library(dplyr)
 ```
+
+###Read in the vcf file and add headers of Chr18.all.ann.vcf:
+
+```{r, cache=TRUE}
+# read in .vcf file
+Chr18.data <- read.table("Chr18.all.ann.vcf", as.is=TRUE, na.strings=".")
+vcf.header <- system("grep '#C' Chr18.all.ann.vcf",intern = TRUE)
+vcf.header <- sub("#","",vcf.header) #get rid of the pound sign
+vcf.header <- unlist(strsplit(vcf.header,split="\t"))
+colnames(Chr18.data) <- vcf.header
+head(Chr18.data)
+```
+
+###String split data
+
+```{r}
+# Before splitting add NAs to blank cells
+
+Chr18.data$DBA[is.na(Chr18.data$DBA)] <- "NA:NA:NA:NA:NA:NA:NA:NA"
+
+DBA.tmp <- matrix(
+  unlist(strsplit(Chr18.data$DBA,split = ":")),
+  nrow=nrow(Chr18.data),
+  byrow=TRUE
+  )
+head(DBA.tmp)
+colnames(DBA.tmp) <- paste("DBA",c("gt","tot.depth","NObsAllele", "ref.depth","ref.qual","alt.depth","alt.qual","gen.lik"),sep="_")
+
+Chr18.data$Chr18[is.na(Chr18.data$Chr18)] <- "NA:NA:NA:NA:NA:NA:NA:NA"
+
+Chr18.tmp <- matrix(
+  unlist(strsplit(Chr18.data$Chr18,split = ":")),
+  nrow=nrow(Chr18.data),
+  byrow=TRUE
+  )
+head(Chr18.tmp)
+colnames(Chr18.tmp) <- paste("Chr18",c("gt","tot.depth","NObsAllele", "ref.depth","ref.qual","alt.depth","alt.qual","gen.lik"),sep="_")
+
+Chr18.data <- cbind(Chr18.data,DBA.tmp,Chr18.tmp,stringsAsFactors=FALSE)
+summary(Chr18.data)
+```
+
+
+###Convert columns back to numeric:
+```{r}
+Chr18.data[,c("DBA_tot.depth","DBA_ref.depth","DBA_ref.qual","DBA_alt.depth","DBA_alt.qual",
+            "Chr18_tot.depth","Chr18_ref.depth","Chr18_ref.qual","Chr18_alt.depth","Chr18_alt.qual")] <- 
+  apply(Chr18.data[,c("DBA_tot.depth","DBA_ref.depth","DBA_ref.qual","DBA_alt.depth","DBA_alt.qual",
+            "Chr18_tot.depth","Chr18_ref.depth","Chr18_ref.qual","Chr18_alt.depth","Chr18_alt.qual")],
+        2,
+        as.numeric
+        )
+head(Chr18.data, 6)
+```
+
+###Subset Chr18.data QUAL > 40
+
+```{r}
+# subset data keeping only SNPs with quality scores greater than or equal to 40
+Chr18.Q40.data <- subset(Chr18.data, QUAL >= 40)
+```
+
+###Make it a little more user-friendly
+```{r}
+Chr18.Q40.tidy.data <-select(Chr18.Q40.data, -ID, -FILTER, -FORMAT, -DBA, -Chr18, -DBA_gen.lik, -Chr18_gen.lik, -DBA_NObsAllele, -Chr18_NObsAllele)
+```
+
+
+
+
