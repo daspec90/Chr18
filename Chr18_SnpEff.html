@@ -448,8 +448,22 @@ Chr18.FNL.data &lt;- subset(Chr18.FNL.data, !(DBA_gt==&quot;1/2&quot; &amp; Chr1
 <h3>Let’s start looking for meaningful variants!</h3>
 <pre class="r"><code># get rid of intergenic_region &amp; intron_variant
 Chr18.InGene &lt;- filter(Chr18.FNL.data, !grepl(&quot;intergenic_region|intron_variant&quot;, INFO))</code></pre>
+</div>
+<div id="based-on-chr18_gt11-snps-the-distal-boundary-of-the-congenic-line-is-near-chr1871500000-instead-of-75000000-so-many-snps-in-chr18.ingene-can-be-ignored-focus-only-on-the-first-224-snps." class="section level3">
+<h3>Based on Chr18_gt==“1/1” SNPs, the distal boundary of the congenic line is near chr18:71500000 (instead of 75000000), so many SNPs in Chr18.InGene can be ignored (focus only on the first 224 SNPs).</h3>
+<p>**N.B. I still need to look at SNPs 1-100 for Chr18.InGene. #### chr18:46574304 (Ticam2) This is convincingly “0/0” in DBA and “1/1” in Chr18 in 5’ UTR. #### The Dtwd2 gene is very convincingly “0/1” at ~50 loci in DBA and “0/0” in Chr18 congenic. I am not sure what this means. #### chr18:66465483 (Pmaip1) – I dunno, maybe. #### chr18:71257402 (Dcc) – plausible candidate gene.</p>
 <pre class="r"><code># captain obvious DBA-gt==&quot;0/0&quot; &amp; Chr18_gt==&quot;1/1&quot;
 smokingGun &lt;- subset(Chr18.InGene, DBA_gt==&quot;0/0&quot; &amp; Chr18_gt==&quot;1/1&quot;)</code></pre>
+<pre class="r"><code># how many DBA coding SNPs (with HIGH scores) are there in the congenic?
+Chr18.DBA &lt;- subset(Chr18.Q40.congenic.tidy.data, DBA_gt==&quot;1/1&quot; &amp; Chr18_gt==&quot;1/1&quot;)
+Chr18.DBA &lt;- filter(Chr18.DBA, POS &gt; 12000000 &amp; POS &lt; 71500000)
+Chr18.DBA &lt;- filter(Chr18.DBA, grepl(&quot;HIGH&quot;, INFO))</code></pre>
+<div id="chr1834221481-non-coding-rna-splice-variant-mutation." class="section level4">
+<h4>chr18:34221481 (non-coding RNA), splice variant mutation.</h4>
+</div>
+<div id="chr1837764110-pcdhgb8-protocadherin-splice-variant-mutation." class="section level4">
+<h4>chr18:37764110 (Pcdhgb8, protocadherin), splice variant mutation.</h4>
+</div>
 </div>
 
 
