@@ -135,9 +135,12 @@ Chr18.InGene <- filter(Chr18.FNL.data, !grepl("intergenic_region|intron_variant"
 
 ###Based on Chr18_gt=="1/1" SNPs, the distal boundary of the congenic line is near chr18:71500000 (instead of 75000000), so many SNPs in Chr18.InGene can be ignored (focus only on the first 224 SNPs).
 
-**N.B. I still need to look at SNPs 1-100 for Chr18.InGene.
+**Individual SNPs**
+#### chr18:35571975 (Matr3) is very convincingly "0/1" in DBA and "0/0" in Chr18. Double crossover + residual heterozygosity? Genomic range: ~20 kb.
+#### chr18:35861043 (Cxxc5). Low coverage, but noticeable "0/0" DBA and "1/1" Chr18 in 3' UTR. There is a second SNP in Cxxc5 3' UTR at chr18:35861057, which seems a little odd.
+#### chr18:36348782 (Cystm1) Convincingly "0/1" DBA and "0/0" Chr18 at many loci.
 #### chr18:46574304 (Ticam2) This is convincingly "0/0" in DBA and "1/1" in Chr18 in 5' UTR.
-#### The Dtwd2 gene is very convincingly "0/1" at ~50 loci in DBA and "0/0" in Chr18 congenic. I am not sure what this means. 
+#### chr18:49697546 (Dtwd2) Very convincingly "0/1" at ~50 loci in DBA and "0/0" in Chr18 congenic. I am not sure what this means. Double crossover + residual heterozygosity? Genomic range: ~60 kb.
 #### chr18:66465483 (Pmaip1) -- I dunno, maybe.
 #### chr18:71257402 (Dcc) -- plausible candidate gene.
 
@@ -146,7 +149,7 @@ Chr18.InGene <- filter(Chr18.FNL.data, !grepl("intergenic_region|intron_variant"
 smokingGun <- subset(Chr18.InGene, DBA_gt=="0/0" & Chr18_gt=="1/1")
 ```
 
-
+####Dtwd2 and Matr3 are identified as the genetic suspects. Both have "0/1" SNPs that are predicted to be severe (~frameshift). Plausible explanation for residual heterozygosity in DBA strain (if this is real.) Matr3 is early embryonic lethal, and expressed in the brain. Involved in nucleic acid binding. Not much information on Dtwd2.
 ```{r}
 # how many DBA coding SNPs (with HIGH scores) are there in the congenic?
 Chr18.DBA <- subset(Chr18.Q40.congenic.tidy.data, DBA_gt=="1/1" & Chr18_gt=="1/1")
@@ -156,4 +159,10 @@ Chr18.DBA <- filter(Chr18.DBA, grepl("HIGH", INFO))
 
 #### chr18:34221481 (non-coding RNA), splice variant mutation.
 #### chr18:37764110 (Pcdhgb8, protocadherin), splice variant mutation.
+**Not many strong coding mutations in this region (a bit surprising).
+
+```{r}
+# a closer look at all of the HIGH calls in Chr18.InGene
+HIGH <- subset(Chr18.InGene, grepl("HIGH", INFO))
+```
 

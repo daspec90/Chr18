@@ -451,18 +451,24 @@ Chr18.InGene &lt;- filter(Chr18.FNL.data, !grepl(&quot;intergenic_region|intron_
 </div>
 <div id="based-on-chr18_gt11-snps-the-distal-boundary-of-the-congenic-line-is-near-chr1871500000-instead-of-75000000-so-many-snps-in-chr18.ingene-can-be-ignored-focus-only-on-the-first-224-snps." class="section level3">
 <h3>Based on Chr18_gt==“1/1” SNPs, the distal boundary of the congenic line is near chr18:71500000 (instead of 75000000), so many SNPs in Chr18.InGene can be ignored (focus only on the first 224 SNPs).</h3>
-<p>**N.B. I still need to look at SNPs 1-100 for Chr18.InGene. #### chr18:46574304 (Ticam2) This is convincingly “0/0” in DBA and “1/1” in Chr18 in 5’ UTR. #### The Dtwd2 gene is very convincingly “0/1” at ~50 loci in DBA and “0/0” in Chr18 congenic. I am not sure what this means. #### chr18:66465483 (Pmaip1) – I dunno, maybe. #### chr18:71257402 (Dcc) – plausible candidate gene.</p>
+<p><strong>Individual SNPs</strong> #### chr18:35571975 (Matr3) is very convincingly “0/1” in DBA and “0/0” in Chr18. Double crossover + residual heterozygosity? Genomic range: ~20 kb. #### chr18:35861043 (Cxxc5). Low coverage, but noticeable “0/0” DBA and “1/1” Chr18 in 3’ UTR. There is a second SNP in Cxxc5 3’ UTR at chr18:35861057, which seems a little odd. #### chr18:36348782 (Cystm1) Convincingly “0/1” DBA and “0/0” Chr18 at many loci. #### chr18:46574304 (Ticam2) This is convincingly “0/0” in DBA and “1/1” in Chr18 in 5’ UTR. #### chr18:49697546 (Dtwd2) Very convincingly “0/1” at ~50 loci in DBA and “0/0” in Chr18 congenic. I am not sure what this means. Double crossover + residual heterozygosity? Genomic range: ~60 kb. #### chr18:66465483 (Pmaip1) – I dunno, maybe. #### chr18:71257402 (Dcc) – plausible candidate gene.</p>
 <pre class="r"><code># captain obvious DBA-gt==&quot;0/0&quot; &amp; Chr18_gt==&quot;1/1&quot;
 smokingGun &lt;- subset(Chr18.InGene, DBA_gt==&quot;0/0&quot; &amp; Chr18_gt==&quot;1/1&quot;)</code></pre>
+<div id="dtwd2-and-matr3-are-identified-as-the-genetic-suspects.-both-have-01-snps-that-are-predicted-to-be-severe-frameshift.-plausible-explanation-for-residual-heterozygosity-in-dba-strain-if-this-is-real.-matr3-is-early-embryonic-lethal-and-expressed-in-the-brain.-involved-in-nucleic-acid-binding.-not-much-information-on-dtwd2." class="section level4">
+<h4>Dtwd2 and Matr3 are identified as the genetic suspects. Both have “0/1” SNPs that are predicted to be severe (~frameshift). Plausible explanation for residual heterozygosity in DBA strain (if this is real.) Matr3 is early embryonic lethal, and expressed in the brain. Involved in nucleic acid binding. Not much information on Dtwd2.</h4>
 <pre class="r"><code># how many DBA coding SNPs (with HIGH scores) are there in the congenic?
 Chr18.DBA &lt;- subset(Chr18.Q40.congenic.tidy.data, DBA_gt==&quot;1/1&quot; &amp; Chr18_gt==&quot;1/1&quot;)
 Chr18.DBA &lt;- filter(Chr18.DBA, POS &gt; 12000000 &amp; POS &lt; 71500000)
 Chr18.DBA &lt;- filter(Chr18.DBA, grepl(&quot;HIGH&quot;, INFO))</code></pre>
+</div>
 <div id="chr1834221481-non-coding-rna-splice-variant-mutation." class="section level4">
 <h4>chr18:34221481 (non-coding RNA), splice variant mutation.</h4>
 </div>
 <div id="chr1837764110-pcdhgb8-protocadherin-splice-variant-mutation." class="section level4">
 <h4>chr18:37764110 (Pcdhgb8, protocadherin), splice variant mutation.</h4>
+<p>**Not many strong coding mutations in this region (a bit surprising).</p>
+<pre class="r"><code># a closer look at all of the HIGH calls in Chr18.InGene
+HIGH &lt;- subset(Chr18.InGene, grepl(&quot;HIGH&quot;, INFO))</code></pre>
 </div>
 </div>
 
